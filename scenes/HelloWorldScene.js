@@ -72,13 +72,35 @@ export default class GameScene extends Phaser.Scene {
 
     // META / OBJETIVO
     this.goal = this.physics.add.sprite(20, 40, 'goal').setScale(.2);
-    this.physics.add.overlap(this.player, this.goal, () => {
-        if (this.collected >= 5) {
-            this.add.text(this.player.x - 100, this.player.y - 40, '¡Ganaste!', { fontSize: '24px', fill: '#fff' });
-            this.physics.pause();
-        } else {
-            this.add.text(this.player.x - 120, this.player.y - 40, 'Te faltan objetos!', { fontSize: '16px', fill: '#f00' });
-        }
+    // Flag para no spamear el warning
+    this.shownWarning = false;
+
+    // Collider con la meta
+    this.goalCollider = this.physics.add.overlap(this.player, this.goal, () => {
+      if (this.collected >= 5) {
+        this.add.text(this.player.x - 100, this.player.y - 40, '¡Ganaste!', {
+          fontSize: '24px', fill: '#fff'
+        });
+        this.physics.pause();
+
+      } else if (!this.shownWarning) {
+        // Solo entra aquí la primera vez
+        this.shownWarning = true;
+
+        // Muestra el texto
+        this.warningText = this.add.text(
+          this.player.x - 120,
+          this.player.y - 40,
+          'Te faltan objetos!',
+          { fontSize: '16px', fill: '#f00' }
+        );
+
+        // Opcional: lo borrás al cabo de 2 segundos
+        this.time.delayedCall(2000, () => {
+          this.warningText.destroy();
+          this.shownWarning = false
+        });
+      }
     });
 
 
