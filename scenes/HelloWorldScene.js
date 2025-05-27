@@ -4,11 +4,11 @@ export default class GameScene extends Phaser.Scene {
   }
 
   preload() {
-      this.load.image('tiles', 'public/assets/tileset.png');
-      this.load.tilemapTiledJSON('map', 'public/assets/tileset.json');
-      this.load.image('collectible', 'public/assets/diamond.png');
-      this.load.image('player', 'public/assets/Ninja.png');
-      this.load.image('goal', 'public/assets/triangle.png');
+      this.load.image('tiles', './public/assets/tileset.png');
+      this.load.tilemapTiledJSON('map', './public/assets/tileset.json');
+      this.load.image('collectible', './public/assets/diamond.png');
+      this.load.image('player', './public/assets/Ninja.png');
+      this.load.image('goal', './public/assets/triangle.png');
     }
     
     create() {
