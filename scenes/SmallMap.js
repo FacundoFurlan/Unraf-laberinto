@@ -1,11 +1,11 @@
-export default class GameScene extends Phaser.Scene {
+export default class SmallMap extends Phaser.Scene {
   constructor() {
-      super('GameScene');
+      super('SmallMap');
   }
 
   preload() {
       this.load.image('tiles', './public/assets/tileset.png');
-      this.load.tilemapTiledJSON('mapB', './public/assets/tilesetGRANDE.json');
+      this.load.tilemapTiledJSON('map', './public/assets/tilesetCHICO.json');
       this.load.image('collectible', './public/assets/diamond.png');
       this.load.image('player', './public/assets/Ninja.png');
       this.load.image('goal', './public/assets/triangle.png');
@@ -14,8 +14,8 @@ export default class GameScene extends Phaser.Scene {
     create() {
     this.lights.enable().setAmbientColor(0x000000);
     // MAPA Y TILESET
-    const map = this.make.tilemap({ key: 'mapB' });
-    const tileset = map.addTilesetImage('4 BigSet', 'tiles');
+    const map = this.make.tilemap({ key: 'map' });
+    const tileset = map.addTilesetImage('tileset', 'tiles');
     const groundLayer = map.createLayer('Ground', tileset);
     const wallsLayer = map.createLayer('Walls', tileset);
     const objectLayer = map.getObjectLayer('Objects');
@@ -37,6 +37,13 @@ export default class GameScene extends Phaser.Scene {
       100      // radio en píxeles
     ).setIntensity(1);
 
+    // Establece los límites del mundo al tamaño del tilemap
+    this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+
+    // Y restringe la cámara al mismo tamaño
+    this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+
+    // Esto mantiene al jugador dentro del mundo
     this.player.setCollideWorldBounds(true);
     this.physics.add.collider(this.player, wallsLayer);
 
@@ -77,11 +84,12 @@ export default class GameScene extends Phaser.Scene {
 
     // Collider con la meta
     this.goalCollider = this.physics.add.overlap(this.player, this.goal, () => {
-      if (this.collected >= 6) {
+      if (this.collected >= 4) {
         this.add.text(this.cameras.main.centerX/2, this.cameras.main.centerY/2, '¡Ganaste!', {
           fontSize: '24px', fill: '#fff'
         }).setOrigin(0.5).setPipeline('Texture');;
         this.physics.pause();
+        this.scene.start("MediumMap")
 
       } else if (!this.shownWarning) {
         // Solo entra aquí la primera vez

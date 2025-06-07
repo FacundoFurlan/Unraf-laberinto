@@ -1,4 +1,6 @@
 import GameScene from "./scenes/HelloWorldScene.js";
+import MediumMap from "./scenes/MediumMap.js";
+import SmallMap from "./scenes/SmallMap.js";
 
 const config = {
     type: Phaser.AUTO,
@@ -11,7 +13,7 @@ const config = {
             debug: false
         }
     },
-    scene: [GameScene],
+    scene: [SmallMap,MediumMap,GameScene],
     pixelArt: true
 };
 
